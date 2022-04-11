@@ -3,7 +3,8 @@ version 1.0
 workflow publicTreeSamplePlacement {
     input {
         File user_fasta_seqs
-        Int treesize = 500
+        Int? treesize
+        Int? subtreesize
     }
 
     parameter_meta {}
@@ -228,7 +229,7 @@ task extractSubtrees {
         Int  diskSizeGB = 10
     }
     command <<<
-        matUtils extract -T ~{threads} -i ~{user_tree} -M ~{metadata},~{translation_table} -s ~{user_samples} -N ~{treesize} -j "user" > matUtils
+        matUtils extract -T ~{threads} -i ~{user_tree} -M ~{metadata},~{translation_table} -s ~{user_samples} -X ~{subtreesize} -j "user" > matUtils
     >>>
     output {
         File out_tsv = "subtree-assignments.tsv"
