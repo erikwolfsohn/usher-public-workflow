@@ -4,7 +4,7 @@ workflow publicTreeSamplePlacement {
     input {
         File user_fasta_seqs
         Int? treesize
-        Int? subtreesize
+        Int subtreesize
     }
 
     parameter_meta {}
@@ -40,7 +40,8 @@ workflow publicTreeSamplePlacement {
             user_tree = usher.new_tree,
             translation_table = translate.translation_table,
             user_samples = getSampleIds.user_samples, 
-            treesize = treesize
+            treesize = treesize,
+            subtreesize = subtreesize
     }
     call taxodium {
         input :
@@ -223,7 +224,8 @@ task extractSubtrees {
         File metadata
         File user_samples
         File translation_table 
-        Int  treesize
+        Int?  treesize
+        Int  subtreesize
         Int  threads = 64
         Int  mem_size = 160
         Int  diskSizeGB = 10
