@@ -50,11 +50,19 @@ workflow publicTreeSamplePlacement {
             #ref_fasta = getFiles.ref_fasta,
             metadata = getFiles.metadata
     }
+    call introduce {
+        input :
+            user_tree = usher.new_tree,
+            user_samples = getSampleIds.user_samples
+    }
     output {
         File integrated_tree = usher.new_tree
         File taxodium_file = taxodium.taxodium_file
         File translation_table = translate.translation_table
-        File subtree_table = extractSubtrees.out_tsv
+        File region_intro=introduce.region_intro
+        File auspice_json = extractSubtrees.out_json
+        File subtree_nh = extractSubtrees.single_subtree
+        File subtree_mutations = extractSubtrees.single_subtree_mutations
     }
 
     meta {
@@ -231,11 +239,15 @@ task extractSubtrees {
         Int  diskSizeGB = 10
     }
     command <<<
-        matUtils extract -T ~{threads} -i ~{user_tree} -M ~{metadata},~{translation_table} -s ~{user_samples} -X ~{subtreesize} -j "user" > matUtils
+        #matUtils extract -T ~{threads} -i ~{user_tree} -M ~{metadata},~{translation_table} -s ~{user_samples} -X ~{subtreesize} -j "user" > matUtils
+        matUtils extract -T ~{threads} -i ~{user_tree} -M ~{metadata},~{translation_table} -s ~{user_samples} -X ~{subtreesize} -j "user.json"
     >>>
     output {
-        File out_tsv = "subtree-assignments.tsv"
-        Array[File] subtree_jsons = glob("*subtree*")
+        #File out_tsv = "subtree-assignments.tsv"
+        #Array[File] subtree_jsons = glob("*subtree*")
+        File out_json = "user.json"
+        File single_subtree = "single-subtree.nh"
+        File single_subtree_mutations = "single-subtree-mutations.txt"
     }
     runtime {
         docker: "yatisht/usher:latest"
@@ -275,5 +287,17 @@ task taxodium {
     }   
 }
 
+task introduce {
+    input {
+        File user_tree
+        File user_samples
+    }
+    command <<<
+        matUtils introduce -i ~{user_tree} -s ~{user_samples} -o "region_intro.tsv"
+    >>>
+    output {
+        File region_intro = "region_intro.tsv"
+    }
+}
 
 
