@@ -1,13 +1,12 @@
 version: 1.2
 workflows:
-   - name: publicTreeSamplePlacementCCPHL
-     subclass: WDL
-     publish: True
-     primaryDescriptorPath: /publicTreeSamplePlacement.wdl
-     authors:
-       - name: Marc Perry
-         email: madperry@ucsc.edu
-         affiliation: University of California, Santa Cruz
-     filters:
-       branches: 
-         - main
+ - name: publicTreeSamplePlacementCCPHL
+   subclass: WDL
+   primaryDescriptorPath: /publicTreeSamplePlacement.wdl
+   testParameterFiles:
+    - empty.json
+ - name: matUtilsTestCCPHL
+   subclass: WDL
+   primaryDescriptorPath: /matUtilsTest.wdl
+   testParameterFiles:
+    - empty.json
