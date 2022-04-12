@@ -21,7 +21,8 @@ workflow matUtilsTest {
     }
 
     output {
-        File subtree_table = extractSubtrees.out_tsv
+        #File subtree_table = extractSubtrees.out_tsv
+        File auspice_json = extractSubtrees.out_json
     }
 
 }
@@ -42,8 +43,9 @@ task extractSubtrees {
         matUtils extract -T ~{threads} -i ~{user_tree} -M ~{metadata},~{translation_table} -s ~{user_samples} -X ~{subtreesize} -j "user.json"
     >>>
     output {
-        File out_tsv = "subtree-assignments.tsv"
-        Array[File] subtree_jsons = glob("*subtree*")
+        #File out_tsv = "subtree-assignments.tsv"
+        #Array[File] subtree_jsons = glob("*subtree*")
+        File out_json = "user.json"
     }
     runtime {
         docker: "yatisht/usher:latest"
