@@ -298,6 +298,13 @@ task introduce {
     output {
         File region_intro = "region_intro.tsv"
     }
+    runtime {
+        docker: "yatisht/usher:latest"
+        cpu:    threads
+        memory: mem_size +" GB"
+        disks:  "local-disk " + diskSizeGB + " SSD"
+        maxRetries: 3
+    }
 }
 
 
