@@ -291,6 +291,9 @@ task introduce {
     input {
         File user_tree
         File user_samples
+        Int  threads = 64
+        Int  mem_size = 160
+        Int  diskSizeGB = 10
     }
     command <<<
         matUtils introduce -i ~{user_tree} -s ~{user_samples} -o "region_intro.tsv"
