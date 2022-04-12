@@ -40,7 +40,7 @@ task extractSubtrees {
         Int  diskSizeGB = 10
     }
     command <<<
-        matUtils extract -T ~{threads} -i ~{user_tree} -M ~{metadata},~{translation_table} -s ~{user_samples} -X ~{subtreesize} -j "user.json"
+        matUtils extract -T ~{threads} -i ~{user_tree} -M ~{metadata},~{translation_table} -s ~{user_samples} -X ~{subtreesize} -j "user.json" > matUtils
     >>>
     output {
         #File out_tsv = "subtree-assignments.tsv"
